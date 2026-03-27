@@ -145,7 +145,7 @@ hr {
 }
 #filter-bar {
   position: sticky;
-  top: 96px; /* 👈 sits under header */
+  top: 96px;
   z-index: 999;
 
   display: flex;
@@ -156,7 +156,7 @@ hr {
   padding: 8px 12px;
   background: #111;
 
-  overflow-x: auto; /* 👈 allows horizontal scroll */
+  overflow-x: auto;
 }
 #filter-bar {
   flex-wrap: wrap;
@@ -217,7 +217,7 @@ hr {
   background-color: rgb(59, 59, 59);
   color: white;
   padding: 3px 8px;
-  border-radius: 12px;      /* rounded corners */
+  border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
@@ -872,15 +872,13 @@ if (!filters.token.has(true)) {
 }
 // Token handling
 if (!filters.token.has(true)) {
-  // 🔴 Token OFF → remove all tokens
   filtered = filtered.filter(card => !card.token);
 } else {
-  // 🟢 Token ON
+
   if (!otherFiltersActive) {
-    // 👉 Token is the ONLY active filter → show only tokens
+    // show only tokens
     filtered = filtered.filter(card => card.token);
   }
-  // 👉 otherwise do nothing (tokens are included alongside others)
 }
 let tokenLabel = "";
 
@@ -932,8 +930,6 @@ if (filters.sort) {
       case "name-desc":
         return b.name.localeCompare(a.name);
     }
-
-    // 🔹 Tie-breaker (applies to everything except pure name sort)
     return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
   });
 }
