@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cards of London</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <style>
+  /* =========================
+   ROOT VARIABLES
+========================= */
+:root {
+  --header-height: 70px;
+  --card-size: 240px;
+  --radius: 8px;
+}
+
+/* =========================
+   GLOBAL / BASE
+========================= */
+body {
+  margin: 0;
+  color: #eee;
+  background: linear-gradient(to bottom, #111, #0a0a0a);
+}
+
+input, textarea, select {
+  background: #222;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: var(--radius);
+}
+
+button {
+  background-color: #333;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #eee;
+  border: 1px solid #555;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+
+}
+button:not(.blood-btn):hover {
+  background-color: #c0392b;
+  box-shadow: 0 0 6px rgba(255,255,255,0.2);
+}
+button:hover img {
+  opacity: 0.7;
+}
+select {
+  background-color: #222;
+  color: #eee;
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  cursor: pointer;
+    appearance: none;
+  background-image: url("icons/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 25px;
+}
+hr {
+  display: none;
+}
+
+/* =========================
+   HEADER
+========================= */
+#page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: linear-gradient(to right, #111, #222);
+  border-bottom: 2px solid #444;
+  margin-bottom: 15px;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: var(--header-height);
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.main-title {
+  text-align: center;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  line-height: 1.1;
+  letter-spacing: 0px;
+  color: #e74c3c;
+  text-shadow: 0 0 6px rgba(231, 76, 60, 0.6),
+               0 0 12px rgba(231, 76, 60, 0.4),
+               0 0 20px rgba(231, 76, 60, 0.2);
+}
+
+.main-title span {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0.85;
+}
+.main-title span:nth-child(1) {
+  font-size: 30px;
+    letter-spacing: 0px;
+}
+
+.main-title span:nth-child(2) {
+  font-size: 10px;
+  opacity: 0.7;
+    letter-spacing: 0px;
+}
+
+.main-title span:nth-child(3) {
+  font-size: 30px;
+  letter-spacing: 0px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.header-right input {
+  padding: 6px 10px;
+  width: 200px;
+  border-radius: var(--radius);
+}
+.title-group {
+  cursor: pointer;
+}
+/* =========================
+   LAYOUT
+========================= */
+#top-layout {
+  display: block;
+  gap: 20px;
+  align-items: flex-start;
+}
+#filter-bar {
+  position: sticky;
+  top: 96px; /* 👈 sits under header */
+  z-index: 999;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  background: #111;
+
+  overflow-x: auto; /* 👈 allows horizontal scroll */
+}
+#filter-bar {
+  flex-wrap: wrap;
+}
+#filter-bar::-webkit-scrollbar {
+  height: 6px;
+}
+
+#filter-bar::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: var(--radius);
+}
+#filter-bar {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+#series-bar {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+/* =========================
+   CARD GRID
+========================= */
+#card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-size), 1fr));
+  gap: 15px;
+  padding: 10px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  height: 380px;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: var(--radius);
+  background: #1a1a1a;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px var(--rarity-color);
+}
+.card-text {
+  text-align: center;
+}
+.card-type {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.type-tag {
+  background-color: rgb(59, 59, 59);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;      /* rounded corners */
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.card-description {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.card-stats span {
+  font-weight: bold;
+}
+
+.clan-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.img-container {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* =========================
+   CLANS COLORS
+========================= */
+.clan-brujah {
+  --clan-color: rgba(255, 166, 0, 0.637);
+}
+
+.clan-toreador {
+  --clan-color: rgba(255, 192, 203, 0.651);
+}
+
+.clan-ventrue {
+  --clan-color: skyblue;
+}
+
+.clan-nosferatu {
+  --clan-color: rgb(156, 156, 156);
+}
+
+.clan-mortal {
+  --clan-color: rgba(238, 238, 205, 0.877);
+}
+
+.clan-tremere {
+  --clan-color: rgba(255, 0, 0, 0.767);
+}
+
+.clan-caitiff {
+  --clan-color: rgba(210, 180, 140, 0.678);}
+
+.clan-gangrel {
+  --clan-color: rgb(47, 168, 47);
+}
+.clan-hecata {
+  --clan-color: rgb(0, 231, 231);
+}
+.card .clan-icon {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) saturate(100%) drop-shadow(0 0 2px var(--clan-color));
+
+}
+
+.card .card-description {
+  color: var(--clan-color);
+}
+/* Rarity colors */
+.rarity-common { --rarity-color: gray; }
+.rarity-rare { --rarity-color: #1976d2; }
+.rarity-epic { --rarity-color: #7b1fa2; }
+.rarity-legendary { --rarity-color: #f57c00; }
+
+#rarity-filters button {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+#rarity-filters button[data-rarity="common"]:hover {
+  background: #9e9e9e;
+  color: black;
+}
+#rarity-filters button[data-rarity="rare"]:hover {
+  background: #1976d2;
+  color: white;
+}
+
+#rarity-filters button[data-rarity="epic"]:hover {
+  background: #7b1fa2;
+  color: white;
+}
+#rarity-filters button[data-rarity="legendary"]:hover {
+  background: #f57c00;
+  color: white;
+}
+#rarity-filters button.active[data-rarity="common"] {
+  background: #9e9e9e;
+  color: black;
+}
+
+#rarity-filters button.active[data-rarity="rare"] {
+  background: #1976d2;
+  color: white;
+}
+
+#rarity-filters button.active[data-rarity="epic"] {
+  background: #7b1fa2;
+  color: white;
+}
+
+#rarity-filters button.active[data-rarity="legendary"] {
+  background: #f57c00;
+  color: white;
+}
+
+/* =========================
+   SERIES BADGE
+========================= */
+.series-badge {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius);
+
+  background-color: #222;
+  font-size: 12px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filter-row,
+.keyword-row,
+.series-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin: 5px 0;
+}
+
+.filter-label {
+  font-weight: bold;
+  min-width: 60px;
+  text-align: right;
+  display: none;
+}
+
+#card-count {
+  color: #aaa;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.buttons button {
+  margin: 5px;
+}
+
+/* Clan buttons */
+.clan-btn {
+  width: 50px;
+  height: 50px;
+  padding: 5px;
+  border-radius: var(--radius);
+  background: #222;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.clan-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1) opacity(0.9);
+}
+
+/* Blood buttons */
+.blood-btn {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.blood-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.4;
+  transition: all 0.2s ease;
+}
+
+.blood-btn span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-55%, -20%);
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 4px black;
+  pointer-events: none;
+}
+
+/* Hover */
+.blood-btn:hover img {
+  opacity: 0.7;
+}
+
+.clear-btn {
+  background: #c0392b;
+  color: white;
+  border: none;}
+
+/* =========================
+   SEARCH
+========================= */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#search-input {
+  padding: 8px;
+  width: 200px;
+  border-radius: var(--radius);
+}
+
+#page-footer {
+  margin-top: 40px;
+  padding: 15px 20px;
+
+  background: linear-gradient(to right, #111, #1a1a1a);
+  border-top: 1px solid #333;
+
+  color: #aaa;
+  font-size: 12px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-left {
+  line-height: 1.4;
+}
+
+.footer-right {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-right img {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.footer-right img:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* =========================
+   STATES (ALWAYS LAST)
+========================= */
+.hidden {
+  display: none;
+}
+
+.active,
+button.active {
+  background-color: #c0392b;
+  color: white;
+}
+
+.clan-btn.active {
+  background-color: #c0392b;
+}
+
+.clan-btn.active img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 5px gold);
+}
+
+.blood-btn.active { background: none !important; color: inherit; }
+.blood-btn.active img {opacity: 1;}
+
+</style>
+
+</head>
+<body>
+
+<header id="page-header">
+<div class="header-left">
+    <div class="title-group">
+<h1 class="main-title">
+  <span>CARDS</span>
+  <span>OF</span>
+  <span>LONDON</span>
+</h1>    </div>
+  </div>
+    <div class="header-right">
+      <input 
+  type="text" 
+  id="search-input" 
+  placeholder="Search cards..."
+  oninput="setSearch(this.value)">
+
+  <!-- Clan -->
+  <div class="filter-group">
+    
+<button onclick="toggleFilter('clans','Brujah')" data-clan="Brujah" class="clan-btn" title="Brujah">
+  <img src="icons/clan-brujah.svg" alt="Brujah">
+</button>    <button onclick="toggleFilter('clans','Caitiff')" data-clan="Caitiff" class="clan-btn" title="Caitiff">
+  <img src="icons/clan-caitiff.svg" alt="Caitiff">
+</button>
+    <button onclick="toggleFilter('clans','Gangrel')" data-clan="Gangrel" class="clan-btn" title="Gangrel">
+  <img src="icons/clan-gangrel.svg" alt="Gangrel">
+</button>
+    <button onclick="toggleFilter('clans','Hecata')" data-clan="Hecata" class="clan-btn" title="Hecata">
+  <img src="icons/clan-hecata.svg" alt="Hecata">
+</button>
+    <button onclick="toggleFilter('clans','Malkavian')" data-clan="Malkavian" class="clan-btn" title="Malkavian">
+  <img src="icons/clan-malkavian.svg" alt="Malkavian">
+</button>
+    <button onclick="toggleFilter('clans','Nosferatu')" data-clan="Nosferatu" class="clan-btn" title="Nosferatu">
+  <img src="icons/clan-nosferatu.svg" alt="Nosferatu">
+</button>
+    <button onclick="toggleFilter('clans','Toreador')" data-clan="Toreador" class="clan-btn" title="Toreador">
+  <img src="icons/clan-toreador.svg" alt="Toreador">
+</button>
+    <button onclick="toggleFilter('clans','Tremere')" data-clan="Tremere" class="clan-btn" title="Tremere">
+  <img src="icons/clan-tremere.svg" alt="Tremere">
+</button>
+    <button onclick="toggleFilter('clans','Ventrue')" data-clan="Ventrue" class="clan-btn" title="Ventrue">
+  <img src="icons/clan-ventrue.svg" alt="Ventrue"></button>
+      <button onclick="toggleFilter('clans','Mortal')" data-clan="Mortal" class="clan-btn" title="Mortal">
+  <img src="icons/clan-mortal.png" alt="Mortal">
+</button>
+</div>
+<!-- Cost -->
+ <div class="filter-group">
+<button onclick="toggleFilter('blood', 1)" data-blood="1" class="blood-btn">
+  <img src="icons/blood.png" alt="1">
+  <span>1</span>
+</button><button onclick="toggleFilter('blood', 2)" data-blood="2" class="blood-btn">
+  <img src="icons/blood.png" alt="2">
+  <span>2</span>
+</button>
+<button onclick="toggleFilter('blood', 3)" data-blood="3" class="blood-btn">
+  <img src="icons/blood.png" alt="3">
+  <span>3</span>
+</button><button onclick="toggleFilter('blood', 4)" data-blood="4" class="blood-btn">
+  <img src="icons/blood.png" alt="4">
+  <span>4</span>
+</button>
+<button onclick="toggleFilter('blood', 5)" data-blood="5" class="blood-btn">
+  <img src="icons/blood.png" alt="5">
+  <span>5</span>
+</button>
+<button onclick="toggleFilter('blood', 6)" data-blood="6" class="blood-btn">
+  <img src="icons/blood.png" alt="6">
+  <span>6</span>
+</button>
+<button onclick="toggleFilter('blood', 7)" data-blood="7" class="blood-btn">
+  <img src="icons/blood.png" alt="7">
+  <span>7</span>
+</button>
+<button onclick="toggleFilter('blood', '8+')" data-blood="8+" class="blood-btn">
+  <img src="icons/blood.png" alt="8+">
+  <span>8+</span>
+</button>
+</div>
+  </div>
+</header>
+  <!-- FILTER BAR -->
+  <div id="filter-bar">
+    
+    <!-- Flags -->
+     <div class="filter-group">
+    <button onclick="toggleFilter('flags','Acolyte')" data-type="Acolyte">Acolyte</button>
+    <button onclick="toggleFilter('flags','Beast')" data-type="Beast">Beast</button>
+    <button onclick="toggleFilter('flags','Elitist')" data-type="Elitist">Elitist</button>
+    <button onclick="toggleFilter('flags','Ghoul')" data-type="Ghoul">Ghoul</button>   
+    <button onclick="toggleFilter('flags','Manipulator')" data-type="Manipulator">Manipulator</button> 
+    <button onclick="toggleFilter('flags','Murderer')" data-type="Murderer">Murderer</button>
+    <button onclick="toggleFilter('flags','Seducer')" data-type="Seducer">Seducer</button>
+    <button onclick="toggleFilter('flags','Sorcerer')" data-type="Sorcerer">Sorcerer</button>
+    <button onclick="toggleFilter('flags','Violent')" data-type="Violent">Violent</button>
+    <button onclick="toggleFilter('token', true)" data-token="true">Token</button>
+  
+  </div>
+  <br>
+  <!--keywords-->
+  <div class="filter-group">
+  <button onclick="toggleFilter('keywords', 'On Reveal')" data-keywords="On Reveal">On Reveal</button>
+  <button onclick="toggleFilter('keywords', 'End of Round')" data-keywords="End of Round">End of Round</button>
+  <button onclick="toggleFilter('keywords', 'Score')" data-keywords="Score">Score</button>
+  <button onclick="toggleFilter('keywords', 'Create')" data-keywords="Create">Create</button>
+  <button onclick="toggleFilter('keywords', 'Discard')" data-keywords="Discard">Discard</button>
+  <button onclick="toggleFilter('keywords', 'Return')" data-keywords="Return">Return</button>
+  <button onclick="toggleFilter('keywords', 'On Attack')" data-keywords="On Attack">On Attack</button>
+  <button onclick="toggleFilter('keywords', 'Conflict')" data-keywords="Conflict">Conflict</button>
+  <button onclick="toggleFilter('keywords', 'Inflict')" data-keywords="Inflict">Inflict</button>
+  <button onclick="toggleFilter('keywords', 'Steal')" data-keywords="Steal">Steal</button>
+  </div>
+   <span id="card-count">0 cards</span>
+      <button onclick="clearFilters()" class="clear-btn" >Clear Filters</button>
+  </div>
+  <!-- Series -->
+   <div id="series-bar">
+ <select id="series-select" onchange="setSeries(this.value)">
+  <option value="">All Series</option>
+  <option value="0">Series 0</option>
+  <option value="1">Series 1</option>
+  <option value="2">Series 2</option>
+  <option value="3">Series 3</option>
+  <option value="4">Series 4</option>
+  <option value="5">Series 5</option>
+</select>
+                <!-- Sorting -->
+    <select onchange="setSort(this.value)">
+    <option value="blood-asc">Blood ↑</option>
+    <option value="blood-desc">Blood ↓</option>
+    <option value="power-asc">Power ↑</option>
+    <option value="power-desc">Power ↓</option>
+    <option value="name-asc">Name ↑</option>
+    <option value="name-desc">Name ↓</option> 
+    <option value="series-asc">Series ↑</option>
+    <option value="series-desc">Series ↓</option>
+   </select>
+  <div id="rarity-filters">
+  <button onclick="toggleFilter('rarity', 'common')" data-rarity="common">Common</button>
+  <button onclick="toggleFilter('rarity', 'rare')" data-rarity="rare">Rare</button>
+  <button onclick="toggleFilter('rarity', 'epic')" data-rarity="epic">Epic</button>
+  <button onclick="toggleFilter('rarity', 'legendary')" data-rarity="legendary">Legendary</button>
+</div>
+  </div>
+</div>
+<hr>
+</div>
+</div>
+
+<div id="top-layout">
+
+
+  <div id="card-container"></div>
+  
+
+  <script>
+    const SHOW_CARD_NAME = false;
+    const gameIdMap = {};
+const reverseGameIdMap = {};
+const currentDeck = { name: "", cards: [] };
+    let cards = [];
+    fetch("cards.json")
+  .then(response => response.json())
+  .then(data => {
+    cards = data;
+    applyFilters();
+    renderDeck();
+  })
+  .catch(error => console.error("Error loading cards:", error));
+
+  const filters = {
+  clans: new Set(),
+  flags: new Set(),
+  blood: new Set(),
+  keywords: new Set(),
+  rarity: new Set(),
+  series: null,
+  token: new Set(),
+  search: "",
+  sort: "blood-asc",
+  showTokens: true
+};
+
+function setSeries(value) {
+  filters.series = value === "" ? null : Number(value);
+  applyFilters();
+}
+
+function toggleFilter(type, value) {
+  const set = filters[type];
+
+  if (!set) return; // safety
+
+  if (set.has(value)) {
+    set.delete(value);
+  } else {
+    set.add(value);
+  }
+
+  updateActiveButtons();
+  applyFilters();
+}
+
+function displayCards(cardList) {
+  const container = document.getElementById("card-container");
+  container.innerHTML = "";
+
+  cardList.forEach(card => {
+    const realIndex = cards.indexOf(card);
+    const hiddenFlags = ["Vampire", "Seducer", "Murderer", "Manipulator"];
+    const visibleTypes = (card.flags || []).filter(
+      t => !hiddenFlags.includes(t)
+    );
+
+    const base = getCardImage(card.name);
+
+    // 🔹 Create main card div
+    const div = document.createElement("div");
+div.className = `card clan-${card.clan.toLowerCase()} rarity-${card.rarity}`;
+    // 🔹 Image container
+    const imgContainer = document.createElement("div");
+    imgContainer.className = "img-container";
+
+    // 🔹 Image
+    const img = document.createElement("img");
+    let isDefault = false;
+
+    img.src = base + ".png";
+
+    img.onerror = () => {
+      img.onerror = () => {
+        img.src = "images/default.png";
+        img.style.filter = "opacity(0.2)";
+        isDefault = true;
+      };
+      img.src = base + ".JPG";
+    };
+
+
+
+    imgContainer.appendChild(img);
+
+    // 🔹 Card body
+    const body = document.createElement("div");
+    body.className = "card-body";
+
+    const name = document.createElement("div");
+    name.className = "card-name";
+    name.innerHTML = `<strong>${card.name}</strong>`;
+
+    const stats = document.createElement("div");
+    stats.className = "card-stats";
+    stats.textContent = `${card.blood}/${card.power} ${capitalize(card.clan)}`;
+
+    const description = document.createElement("div");
+    description.className = "card-description";
+    description.innerHTML = `
+      <img src="icons/clan-${card.clan}.svg" class="clan-icon">
+  <span class="card-description">${card.description || ""}</span>
+`;
+
+    const type = document.createElement("div");
+    type.className = "card-type";
+    type.innerHTML = visibleTypes.length
+    ? visibleTypes.map(t => `<span class="type-tag type-${t.toLowerCase()}">${t}</span>`).join("")
+    : "&nbsp;";
+
+    const text = document.createElement("div");
+    text.className = "card-text";
+    text.textContent = card.trait;
+
+    // 🔹 Series badge
+    const seriesBadge = document.createElement("div");
+    seriesBadge.className = "series-badge";
+    seriesBadge.textContent = card.series;
+
+    // 🔹 Assemble body
+    if (SHOW_CARD_NAME) {
+  body.appendChild(name);
+}
+    //body.appendChild(stats);
+    body.appendChild(description);
+    body.appendChild(type);
+    body.appendChild(text);
+
+    // 🔹 Assemble card
+    div.appendChild(imgContainer);
+    div.appendChild(body);
+    div.appendChild(seriesBadge);
+
+    container.appendChild(div);
+  });
+}
+    function updateCardHighlights() {
+  const cardElements = document.querySelectorAll(".card");
+
+  cardElements.forEach((el, index) => {
+    if (currentDeck.cards.includes(index)) {
+      el.classList.add("in-deck");
+    } else {
+      el.classList.remove("in-deck");
+    }
+  });
+}
+
+function normalizeText(str) {
+  return str
+    .normalize("NFD")                 // split letters + accents
+    .replace(/[\u0300-\u036f]/g, "")  // remove accents
+    .toLowerCase();                  // make case-insensitive
+}
+
+function setSearch(value) {
+  filters.search = normalizeText(value);
+  applyFilters();
+}
+
+function setSort(value) {
+  filters.sort = value;
+  applyFilters();
+}
+
+function getCardImage(name) {
+  return "images/" + name.replace(/\s+/g, "_");
+}
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function applyFilters() {
+  let filtered = [...cards];
+
+  // Blood
+  if (filters.blood.size) {
+    filtered = filtered.filter(card =>
+      [...filters.blood].some(b =>
+        b === "8+" ? card.blood >= 8 : card.blood === b
+      )
+    );
+  }
+
+  // Clan
+  if (filters.clans.size) {
+    filtered = filtered.filter(card =>
+      filters.clans.has(capitalize(card.clan))
+    );
+  }
+
+  // Flags
+  if (filters.flags.size) {
+    filtered = filtered.filter(card =>
+      card.flags && [...filters.flags].some(f => card.flags.includes(f))
+    );
+  }
+  // keywords
+if (filters.keywords.size) {
+  filtered = filtered.filter(card =>
+    [...filters.keywords].every(k =>
+      card.trait && card.trait.includes(k)
+    )
+  );
+}
+  // Series
+ if (filters.series !== null) {
+  filtered = filtered.filter(card =>
+    card.series === filters.series
+  );
+}
+  // Rarity
+if (filters.rarity.size) {
+  filtered = filtered.filter(card =>
+    filters.rarity.has(card.rarity)
+  );
+}
+
+const otherFiltersActive =
+  filters.blood.size ||
+  filters.clans.size ||
+  filters.flags.size ||
+  filters.keywords.size ||
+  filters.rarity.size ||
+  filters.series !== null;
+
+  let tokenMode;
+
+if (!filters.token.has(true)) {
+  tokenMode = "none";          // No Tokens
+} else if (!otherFiltersActive) {
+  tokenMode = "only";          // Tokens only
+} else {
+  tokenMode = "included";      // Tokens included
+}
+// Token handling
+if (!filters.token.has(true)) {
+  // 🔴 Token OFF → remove all tokens
+  filtered = filtered.filter(card => !card.token);
+} else {
+  // 🟢 Token ON
+  if (!otherFiltersActive) {
+    // 👉 Token is the ONLY active filter → show only tokens
+    filtered = filtered.filter(card => card.token);
+  }
+  // 👉 otherwise do nothing (tokens are included alongside others)
+}
+let tokenLabel = "";
+
+if (tokenMode === "only") {
+  tokenLabel = " (Tokens only)";
+} else if (tokenMode === "included") {
+  tokenLabel = " (with Tokens)";
+} else if (tokenMode === "none") {
+  tokenLabel = " (no Tokens)";
+}
+  // Search
+if (filters.search) {
+  const search = normalizeText(filters.search);
+
+  filtered = filtered.filter(card => {
+    const name = normalizeText(card.name);
+    const trait = normalizeText(card.trait || "");
+    const description = normalizeText(card.description || "");
+    const clan = normalizeText(card.clan || "");
+    const flags = normalizeText((card.flags || []).join(" "));
+
+    return (
+      name.includes(search) ||
+      trait.includes(search) ||
+      description.includes(search) ||
+      clan.includes(search) ||
+      flags.includes(search)
+    );
+  });
+}
+
+  // Sorting
+if (filters.sort) {
+  filtered.sort((a, b) => {
+    switch (filters.sort) {
+      case "blood-asc":
+        if (a.blood !== b.blood) return a.blood - b.blood;
+        break;
+
+      case "blood-desc":
+        if (a.blood !== b.blood) return b.blood - a.blood;
+        break;
+
+      case "power-asc":
+        if (a.power !== b.power) return a.power - b.power;
+        break;
+
+      case "power-desc":
+        if (a.power !== b.power) return b.power - a.power;
+        break;
+
+      case "series-asc":
+        if (a.series !== b.series) return a.series - b.series;
+        break;
+
+      case "series-desc":
+        if (a.series !== b.series) return b.series - a.series;
+        break;
+
+      case "name-asc":
+        return a.name.localeCompare(b.name);
+
+      case "name-desc":
+        return b.name.localeCompare(a.name);
+    }
+
+    // 🔹 Tie-breaker (applies to everything except pure name sort)
+    return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
+  });
+}
+
+
+const count = filtered.length;
+
+let label = count + (count === 1 ? " card" : " cards");
+label += tokenLabel;
+
+document.getElementById("card-count").textContent = label;
+  displayCards(filtered);
+}
+
+
+function updateActiveButtons() {
+  document.querySelectorAll("[data-clan], [data-blood], [data-type], [data-keywords], [data-token], [data-rarity]").forEach(btn => {
+    btn.classList.remove("active");
+
+    const blood = btn.dataset.blood;
+    const clan = btn.dataset.clan;
+    const type = btn.dataset.type;
+    const keywords = btn.dataset.keywords;
+    const token = btn.dataset.token;
+    const rarity = btn.dataset.rarity;
+
+    if (blood && filters.blood.has(blood === "8+" ? "8+" : Number(blood))) {
+      btn.classList.add("active");
+    }
+
+    if (clan && filters.clans.has(clan)) {
+      btn.classList.add("active");
+    }
+
+    if (type && filters.flags.has(type)) {
+      btn.classList.add("active");}
+
+     if (keywords && filters.keywords.has(keywords)) {
+  btn.classList.add("active");
+}
+    if(rarity && filters.rarity.has(rarity)) {
+      btn.classList.add("active");
+    }
+    if (token && filters.token.has(true)) {
+      btn.classList.add("active");
+    }
+  });
+}
+      
+function clearFilters() {
+  filters.clans.clear();
+  filters.flags.clear();
+  filters.blood.clear();
+  filters.keywords.clear();
+  filters.series = null;
+  filters.search = "";
+  filters.sort = "blood-asc";
+  filters.rarity.clear();
+  filters.showTokens = true;
+  document.getElementById("series-select").value = "";
+  document.getElementById("search-input").value = "";
+
+  updateActiveButtons();
+  applyFilters();
+}
+document.querySelector(".title-group").addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth" // nice smooth scroll
+  });
+});
+  </script>
+
+<footer id="page-footer">
+  <div class="footer-content">
+
+    <div class="footer-left">
+      Portions of the materials are the copyrights and trademarks of Paradox Interactive AB, Well Played Games and White Wolf, and are used with permission. All rights reserved. For more information please visit clansoflondon.com and worldofdarkness.com.
+    </div>
+    <div class="footer-right">
+ Cards of London — v0.1
+</div>
+
+  </div>
+</footer>
+</body>
+</html>
